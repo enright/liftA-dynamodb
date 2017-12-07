@@ -1,0 +1,17 @@
+{
+  "name": "lifta-dynamodb",
+  "version": "0.0.1",
+  "description": "asynch arrows for amazon aws dynamodb",
+  "main": "liftA-dynamodb.js",
+  "jshintConfig": {
+    "esversion": 6
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bill Enright",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.165.0"
+  }
+}
