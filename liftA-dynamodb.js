@@ -36,7 +36,6 @@ SOFTWARE.
   			if (err) {
   				x = arw.Error(err, x);
   			} else {
-  				console.log('dyna callback data: ', data);
   				x = [data, x.second()];
   			}
   			advance();
@@ -47,7 +46,6 @@ SOFTWARE.
   			let cancelId;
   			let advance = () => p.advance(cancelId);
   			let params = reqParams(x);
-  			console.log('getItemA params: ', params);
   			let req = dynamo.getItem(params, cb.bind(undefined, x, cont, p, advance));
   			cancelId = p.add(() => req.abort());
   			return cancelId;
