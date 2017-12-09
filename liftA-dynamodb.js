@@ -42,18 +42,58 @@ SOFTWARE.
   			cont(x, p);
   		};
 
-  		let getItemA = (reqParams) => (x, cont, p) => {
-  			let cancelId;
-  			let advance = () => p.advance(cancelId);
-  			let params = reqParams(x);
-  			let req = dynamo.getItem(params, cb.bind(undefined, x, cont, p, advance));
-  			cancelId = p.add(() => req.abort());
-  			return cancelId;
-  		};
+      function dynamoErrorBack(method) {
+        return (reqParams) => function (x, cont, p) {
+    			let cancelId;
+    			let advance = () => p.advance(cancelId);
+    			let req = dynamo[method](reqParams(x), cb.bind(undefined, x, cont, p, advance));
+    			cancelId = p.add(() => req.abort());
+    			return cancelId;
+    		};
+      }
+
+      function waitForA(state, params) {
+        return function (x, cont, p) {
+    			let cancelId;
+    			let advance = () => p.advance(cancelId);
+    			let req = dynamo.waitFor(state(x), params(x), cb.bind(undefined, x, cont, p, advance));
+    			cancelId = p.add(() => req.abort());
+    			return cancelId;
+        };
+      }
 
   		return {
-  			getItemA: getItemA
-  		};
+        batchGetItemA: dynamoErrorBack('batchGetItem'),
+        batchWriteItemA: dynamoErrorBack('batchWriteItem'),
+        createBackupA: dynamoErrorBack('createBackup'),
+        createGlobalTableA: dynamoErrorBack('createGlobalTable'),
+        createTableA: dynamoErrorBack('createTable'),
+        deleteBackupA: dynamoErrorBack('deleteBackup'),
+        deleteItemA: dynamoErrorBack('deleteItem'),
+        deleteTableA: dynamoErrorBack('deleteTable'),
+        describeBackupA: dynamoErrorBack('describeBackup'),
+        describeContinuousBackupsA: dynamoErrorBack('describeContinuousBackups'),
+        describeGlobalTableA: dynamoErrorBack('describeGlobalTable'),
+        describeLimitsA: dynamoErrorBack('describeLimits'),
+        describeTableA: dynamoErrorBack('describeTable'),
+        describeTimeToLiveA: dynamoErrorBack('describeTimeToLive'),
+        getItemA: dynamoErrorBack('getItem'),
+        listBackupsA: dynamoErrorBack('listBackups'),
+        listGlobalTablesA: dynamoErrorBack('listGlobalTables'),
+        listTablesA: dynamoErrorBack('listTables'),
+        listTagsOfResourceA: dynamoErrorBack('listTagsOfResource'),
+        putItemA: dynamoErrorBack('putItem'),
+        queryA: dynamoErrorBack('query'),
+        restoreTableFromBackupA: dynamoErrorBack('restoreTableFromBackup'),
+        scanA: dynamoErrorBack('scan'),
+        tagResourceA: dynamoErrorBack('tagResource'),
+        untagResourceA: dynamoErrorBack('untagResource'),
+        updateGlobalTableA: dynamoErrorBack('updateGlobalTable'),
+        updateItemA: dynamoErrorBack('updateItem'),
+        updateTableA: dynamoErrorBack('updateTable'),
+        updateTimeToLiveA: dynamoErrorBack('updateTimeToLive'),
+        waitForA: waitForA
+        };
   	})(awsDynamo(dynamoConfig));
   };
 
