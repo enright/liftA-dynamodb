@@ -12,10 +12,10 @@
   "author": "Bill Enright",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.165.0"
+    "aws-sdk": "^2.209.0"
   },
   "devDependencies": {
-    "lifta": "0.0.6",
+    "lifta": "0.0.7",
     "mocha": "^5.0.4",
     "should": "^13.2.1"
   }
