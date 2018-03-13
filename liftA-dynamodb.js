@@ -37,23 +37,23 @@ SOFTWARE.
 				if (err) {
 					x = arw.Error(err, x);
 				} else {
-					x = [data, x.second()];
+					x = data;
 				}
 				advance();
 				cont(x, p);
 			};
 
 			function dynamoErrorBack(method) {
-				return (reqParams) => function (x, cont, p) {
+				return function (x, cont, p) {
 					let cancelId;
 					let advance = () => p.advance(cancelId);
-					let req = dynamo[method](reqParams(x), cb.bind(undefined, x, cont, p, advance));
+					let req = dynamo[method](x, cb.bind(undefined, x, cont, p, advance));
 					cancelId = p.add(() => req.abort());
 					return cancelId;
 				};
 			}
 
-			function waitForA(state, params) {
+			function waitFor(state, params) {
 				return function (x, cont, p) {
 					let cancelId;
 					let advance = () => p.advance(cancelId);
@@ -63,7 +63,7 @@ SOFTWARE.
 				};
 			}
 
-			function documentClientA(options) {
+			function documentClient(options) {
 				let aws = require('aws-sdk');
 				if (options) {
 					if (!options.service) {
@@ -74,10 +74,10 @@ SOFTWARE.
 				}
 				let doc = new aws.DynamoDB.DocumentClient(options);
 				function docErrorBack(method) {
-					return (reqParams) => function (x, cont, p) {
+					return function (x, cont, p) {
 						let cancelId;
 						let advance = () => p.advance(cancelId);
-						let req = doc[method](reqParams(x), cb.bind(undefined, x, cont, p, advance));
+						let req = doc[method](x, cb.bind(undefined, x, cont, p, advance));
 						cancelId = p.add(() => req.abort());
 						return cancelId;
 					};
@@ -96,7 +96,7 @@ SOFTWARE.
 			}
 
 			return {
-				documentClientA: documentClientA,
+				documentClient: documentClient,
 				batchGetItemA: dynamoErrorBack('batchGetItem'),
 				batchWriteItemA: dynamoErrorBack('batchWriteItem'),
 				createBackupA: dynamoErrorBack('createBackup'),
@@ -126,7 +126,7 @@ SOFTWARE.
 				updateItemA: dynamoErrorBack('updateItem'),
 				updateTableA: dynamoErrorBack('updateTable'),
 				updateTimeToLiveA: dynamoErrorBack('updateTimeToLive'),
-				waitForA: waitForA
+				waitFor: waitFor
 				};
 		})(awsDynamo(dynamoConfig));
 	};
