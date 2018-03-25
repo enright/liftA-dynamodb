@@ -1,6 +1,6 @@
 {
   "name": "lifta-dynamodb",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "asynch arrows for amazon aws dynamodb",
   "main": "liftA-dynamodb.js",
   "jshintConfig": {
