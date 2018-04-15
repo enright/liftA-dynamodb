@@ -30,12 +30,13 @@ SOFTWARE.
     return new DynamoDB(dynamoConfig);
   }
 
-  module.exports = function (arw, dynamoConfig) {
+  module.exports = function (dynamoConfig) {
 
     return ((dynamo) => {
       let cb = (x, cont, p, advance, err, data) => {
         if (err) {
-          x = arw.Error(err, x);
+          err.x = x;
+          x = err;
         } else {
           x = data;
         }

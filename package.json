@@ -1,6 +1,6 @@
 {
   "name": "lifta-dynamodb",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "asynch arrows for amazon aws dynamodb",
   "main": "liftA-dynamodb.js",
   "jshintConfig": {
@@ -15,7 +15,7 @@
     "aws-sdk": "^2.209.0"
   },
   "devDependencies": {
-    "lifta": "0.0.12",
+    "lifta": "0.0.13",
     "mocha": "^5.0.4",
     "should": "^13.2.1"
   }
